@@ -40,6 +40,10 @@ if (!$price_id) {
 \Stripe\Stripe::setApiKey($stripe_secret);
 
 try {
+    // Detect Protocol properly
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+    $baseUrl = $protocol . $_SERVER['HTTP_HOST'] . '/PriceSmart';
+
     // 3. Criar a Sessão de Checkout
     $checkout_session = \Stripe\Checkout\Session::create([
         'line_items' => [[
@@ -47,8 +51,8 @@ try {
             'quantity' => 1,
         ]],
         'mode' => 'subscription', // Para planos recorrentes (mensalidade)
-        'success_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/PriceSmart/app/billing_success.php?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => 'http://' . $_SERVER['HTTP_HOST'] . '/PriceSmart/app/index.php',
+        'success_url' => $baseUrl . '/app/billing_success.php?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => $baseUrl . '/app/index.php',
         'client_reference_id' => $_SESSION['company_id'], // Importante para o Webhook saber quem pagou
     ]);
 
