@@ -1,0 +1,136 @@
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    :root {
+        --side-width: 0px;
+    }
+
+    /* Transform Sidebar into Bottom Navigation */
+    .sidebar {
+        width: 100%;
+        height: 70px;
+        bottom: 0;
+        top: auto;
+        flex-direction: row;
+        padding: 0;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-sidebar);
+        justify-content: center;
+    }
+
+    .sidebar:hover {
+        width: 100%;
+        height: 70px;
+        padding: 0;
+    }
+
+    .sidebar-logo,
+    .nav-footer {
+        display: none;
+    }
+
+    .nav-menu {
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+        width: 100%;
+        max-width: 500px;
+        /* Limit width on tablets */
+    }
+
+    .nav-item {
+        margin-bottom: 0;
+        width: auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-link {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+    }
+
+    .nav-link i,
+    .nav-link svg {
+        min-width: 24px;
+        font-size: 1.5rem;
+    }
+
+    .nav-link span {
+        display: none !important;
+    }
+
+    /* Main Content Adjustments */
+    .main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 1.5rem 1rem;
+        padding-bottom: 100px;
+        /* Space for bottom nav */
+    }
+
+    /* Header */
+    header.app-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .user-profile {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Grids to Single Column */
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Make tables scrollable */
+    .card-section {
+        grid-column: span 1 !important;
+        /* Force full width in grid */
+        padding: 1.25rem;
+        overflow-x: hidden;
+        /* Container handles overflow */
+    }
+
+    .app-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    /* Modal Mobile */
+    .modal-content {
+        width: 90%;
+        padding: 1.5rem;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+
+    /* Adjust Buttons */
+    .btn {
+        width: 100%;
+        /* Full width buttons usually better on mobile */
+        justify-content: center;
+    }
+
+    .card-title .btn-help {
+        float: right;
+    }
+}

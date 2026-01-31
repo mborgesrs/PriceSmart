@@ -577,3 +577,4 @@ header.app-header {
     opacity: 1;
     visibility: visible;
 }
+@import 'app_mobile.css';

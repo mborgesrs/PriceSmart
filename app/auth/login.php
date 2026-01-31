@@ -135,6 +135,21 @@
             text-decoration: none;
             font-weight: 600;
         }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 2rem 1rem;
+                overflow-y: auto;
+            }
+        }
     </style>
 </head>
 <body>

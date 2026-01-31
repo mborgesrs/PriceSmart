@@ -144,6 +144,31 @@
             text-decoration: none;
             font-weight: 600;
         }
+
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.5rem;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-height: 800px) {
+            body {
+                height: auto;
+                min-height: 100vh;
+                padding: 2rem 1rem;
+                overflow-y: auto;
+                display: block; /* Remove flex centering to verify scroll */
+            }
+            .login-card {
+                margin: 0 auto;
+            }
+        }
     </style>
 </head>
 <body>
