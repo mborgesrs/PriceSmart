@@ -386,15 +386,15 @@ $products = $stmt->fetchAll();
 
         function showProductsHelp() {
             showHelp('Gestão de Catálogo', `
-                <p>Aqui você gerencia seu portfólio de produtos e entende como a IA utiliza seus dados:</p>
+                <p>Gerencie seus SKUs e entenda a lógica de precificação do PriceSmart:</p>
                 <ul style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem;">
-                    <li><strong>Preço de Venda:</strong> Você informa o valor manualmente. Ele serve como "ponto de partida" para as análises do sistema.</li>
-                    <li><strong>Base para IA:</strong> Nossa inteligência monitora esse preço junto com seu estoque e custos para propor ajustes na aba "Precificação IA".</li>
-                    <li><strong>Proteção de Margem:</strong> A IA sempre respeitará a "Margem Mínima" que você definiu, garantindo que sugestões nunca gerem prejuízo.</li>
-                    <li><strong>Importação/Busca:</strong> Use a busca rápida para localizar SKUs ou importe planilhas CSV para atualizações em massa.</li>
+                    <li><strong>Preço de Venda Sugerido (Zerado):</strong> Ao cadastrar um produto, o preço de venda pode iniciar zerado ou como sugestão.</li>
+                    <li><strong>Cálculo Automático (CDD):</strong> O sistema utiliza os impostos e custos que você informou (Custos Gerais e por SKU) para calcular automaticamente o preço final necessário para cobrir suas despesas (CDD - Custo Direto de Distribuição) e atingir sua margem.</li>
+                    <li><strong>Proteção de Margem:</strong> A IA respeitará a "Margem Mínima" definida, garantindo que o preço sugerido nunca gere prejuízo.</li>
+                    <li><strong>Importação/Busca:</strong> Use a busca rápida ou importe planilhas CSV para atualizações em massa.</li>
                 </ul>
                 <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 0.75rem;">
-                    <strong>Dica:</strong> Mantenha o Preço de Custo sempre atualizado para que o cálculo de margem em tempo real seja fidedigno.
+                    <strong>Dica:</strong> Mantenha os custos e impostos atualizados para que o cálculo do preço final seja preciso.
                 </p>
             `);
         }
