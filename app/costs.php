@@ -60,7 +60,8 @@ $company = $stmtComp->fetch();
             <li class="nav-item"><a href="pricing.php" class="nav-link"><i data-lucide="tags"></i> <span>Precificação IA</span></a></li>
             <li class="nav-item"><a href="costs.php" class="nav-link active"><i data-lucide="dollar-sign"></i> <span>Custos Gerais</span></a></li>
             <li class="nav-item"><a href="sku_costs.php" class="nav-link"><i data-lucide="list-checks"></i> <span>Custos por SKU</span></a></li>
-            <li class="nav-item"><a href="simulator.php" class="nav-link"><i data-lucide="flask-conical"></i> <span>Simulador</span></a></li>
+            <li class="nav-item"><a href="simulator.php" class="nav-link"><i data-lucide="flask-conical"></i> <span>Simulador Lucro</span></a></li>
+            <li class="nav-item"><a href="purchase_simulator.php" class="nav-link"><i data-lucide="shopping-cart"></i> <span>Simulador Compra</span></a></li>
             <li class="nav-item"><a href="integrations.php" class="nav-link"><i data-lucide="plug-2"></i> <span>Integrações</span></a></li>
         </ul>
         <div class="nav-footer">

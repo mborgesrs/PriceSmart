@@ -131,7 +131,8 @@ function getButtonClass($platform, $db_integrations) {
                     <span>Custos por SKU</span>
                 </a>
             </li>
-            <li class="nav-item"><a href="simulator.php" class="nav-link"><i data-lucide="flask-conical"></i> <span>Simulador</span></a></li>
+            <li class="nav-item"><a href="simulator.php" class="nav-link"><i data-lucide="flask-conical"></i> <span>Simulador Lucro</span></a></li>
+            <li class="nav-item"><a href="purchase_simulator.php" class="nav-link"><i data-lucide="shopping-cart"></i> <span>Simulador Compra</span></a></li>
             <li class="nav-item"><a href="integrations.php" class="nav-link active"><i data-lucide="plug-2"></i> <span>Integrações</span></a></li>
         </ul>
         <div class="nav-footer">

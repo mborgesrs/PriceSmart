@@ -131,7 +131,13 @@ $top_skus = $stmtProducts->fetchAll();
             <li class="nav-item">
                 <a href="simulator.php" class="nav-link">
                     <i data-lucide="flask-conical"></i>
-                    <span>Simulador</span>
+                    <span>Simulador Lucro</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="purchase_simulator.php" class="nav-link">
+                    <i data-lucide="shopping-cart"></i>
+                    <span>Simulador Compra</span>
                 </a>
             </li>
             <li class="nav-item">

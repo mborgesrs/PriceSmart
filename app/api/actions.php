@@ -317,6 +317,99 @@ switch ($action) {
             $response['message'] = $e->getMessage();
         }
         break;
+
+    case 'save_purchase_simulation':
+        try {
+            $pdo->beginTransaction();
+            $id = $data['id'] ?? null;
+            $base_date = $data['base_date'];
+            $supplier_name = $data['supplier_name'] ?? '';
+            $items = $data['items'] ?? [];
+            $total_value = 0;
+
+            foreach ($items as $item) {
+                $total_value += floatval($item['real_cost']);
+            }
+
+            if ($id) {
+                // Update header
+                $stmt = $pdo->prepare("UPDATE purchase_simulations SET base_date = ?, supplier_name = ?, total_value = ? WHERE id = ? AND company_id = ?");
+                $stmt->execute([$base_date, $supplier_name, $total_value, $id, $company_id]);
+                $simulation_id = $id;
+
+                // Delete old items to re-insert (cleaner than updating each)
+                $stmtDelete = $pdo->prepare("DELETE FROM purchase_simulation_items WHERE simulation_id = ?");
+                $stmtDelete->execute([$simulation_id]);
+            } else {
+                // Insert header
+                $stmt = $pdo->prepare("INSERT INTO purchase_simulations (company_id, base_date, supplier_name, total_value) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$company_id, $base_date, $supplier_name, $total_value]);
+                $simulation_id = $pdo->lastInsertId();
+            }
+
+            $stmtItem = $pdo->prepare("INSERT INTO purchase_simulation_items (simulation_id, product_id, base_cost, taxes_and_costs, real_cost) VALUES (?, ?, ?, ?, ?)");
+            foreach ($items as $item) {
+                $stmtItem->execute([
+                    $simulation_id,
+                    $item['product_id'],
+                    $item['base_cost'],
+                    json_encode($item['taxes_and_costs']),
+                    $item['real_cost']
+                ]);
+            }
+
+            $pdo->commit();
+            $response = ['success' => true, 'message' => 'Simulação de compra salva com sucesso!'];
+        } catch (Exception $e) {
+            if ($pdo->inTransaction()) $pdo->rollBack();
+            $response['message'] = $e->getMessage();
+        }
+        break;
+
+    case 'get_purchase_simulation_details':
+        try {
+            $id = $data['id'];
+            $stmt = $pdo->prepare("SELECT * FROM purchase_simulations WHERE id = ? AND company_id = ?");
+            $stmt->execute([$id, $company_id]);
+            $simulation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$simulation) throw new Exception("Simulação não encontrada.");
+
+            $stmtItems = $pdo->prepare("SELECT si.*, p.name, p.sku FROM purchase_simulation_items si JOIN products p ON si.product_id = p.id WHERE si.simulation_id = ?");
+            $stmtItems->execute([$id]);
+            $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
+
+            // Decode JSON for frontend
+            foreach ($items as &$item) {
+                $item['taxes_and_costs'] = json_decode($item['taxes_and_costs'], true);
+            }
+
+            $response = ['success' => true, 'simulation' => $simulation, 'items' => $items];
+        } catch (Exception $e) {
+            $response['message'] = $e->getMessage();
+        }
+        break;
+
+    case 'get_purchase_simulations':
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM purchase_simulations WHERE company_id = ? ORDER BY created_at DESC");
+            $stmt->execute([$company_id]);
+            $sims = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $response = ['success' => true, 'simulations' => $sims];
+        } catch (Exception $e) {
+            $response['message'] = $e->getMessage();
+        }
+        break;
+
+    case 'delete_purchase_simulation':
+        try {
+            $stmt = $pdo->prepare("DELETE FROM purchase_simulations WHERE id = ? AND company_id = ?");
+            $stmt->execute([$data['id'], $company_id]);
+            $response = ['success' => true, 'message' => 'Simulação excluída!'];
+        } catch (Exception $e) {
+            $response['message'] = $e->getMessage();
+        }
+        break;
 }
 
 echo json_encode($response);
