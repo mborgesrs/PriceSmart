@@ -9,8 +9,17 @@ $stmtProds = $pdo->prepare("SELECT id, name, sku, cost_price FROM products WHERE
 $stmtProds->execute([$company_id]);
 $products = $stmtProds->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch saved simulations
-$stmtSims = $pdo->prepare("SELECT * FROM purchase_simulations WHERE company_id = ? ORDER BY created_at DESC");
+// Fetch saved simulations with item summary (with fallback to current product data for old records)
+$stmtSims = $pdo->prepare("
+    SELECT ps.*, 
+    (SELECT GROUP_CONCAT(CONCAT(COALESCE(si.item_name, p.name, 'Produto'), ' (', COALESCE(si.item_code, p.sku, 'N/A'), ')') SEPARATOR ', ') 
+     FROM purchase_simulation_items si
+     LEFT JOIN products p ON si.product_id = p.id
+     WHERE si.simulation_id = ps.id) as items_summary
+    FROM purchase_simulations ps 
+    WHERE ps.company_id = ? 
+    ORDER BY ps.created_at DESC
+");
 $stmtSims->execute([$company_id]);
 $simulations = $stmtSims->fetchAll(PDO::FETCH_ASSOC);
 
@@ -68,12 +77,13 @@ $global_costs = $stmtCosts->fetchAll(PDO::FETCH_ASSOC);
             align-items: center;
         }
         .real-cost-badge {
-            background: var(--primary);
-            color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 10px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.95rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
         .btn-remove-item {
             color: #ef4444;
@@ -227,12 +237,20 @@ $global_costs = $stmtCosts->fetchAll(PDO::FETCH_ASSOC);
                     <?php foreach($simulations as $sim): ?>
                         <div class="simulation-list-card">
                             <div style="flex: 1;">
-                                <div style="font-weight: 800; color: var(--text-main); font-size: 1.1rem;"><?= htmlspecialchars($sim['supplier_name']) ?: 'Sem fornecedor' ?></div>
+                                <div style="font-weight: 700; color: var(--text-main); font-size: 1.1rem;"><strong><?= htmlspecialchars($sim['supplier_name']) ?: 'Sem fornecedor' ?></strong></div>
                                 <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.25rem;">
                                     <i data-lucide="calendar" style="width: 14px; display: inline; vertical-align: middle;"></i> <?= date('d/m/Y', strtotime($sim['base_date'])) ?> 
                                     <span style="margin: 0 0.75rem; color: var(--border);">|</span>
-                                    <i data-lucide="dollar-sign" style="width: 14px; display: inline; vertical-align: middle;"></i> Total: <strong>R$ <?= number_format($sim['total_value'], 2, ',', '.') ?></strong>
+                                    <i data-lucide="dollar-sign" style="width: 14px; display: inline; vertical-align: middle;"></i> Total: <strong style="color: var(--primary); font-size: 1rem;">R$ <?= number_format($sim['total_value'], 2, ',', '.') ?></strong>
                                 </div>
+                                <?php if($sim['items_summary']): ?>
+                                    <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem; display: flex; align-items: flex-start; gap: 0.4rem;">
+                                        <i data-lucide="package" style="width: 14px; flex-shrink: 0; margin-top: 2px;"></i>
+                                        <span style="line-clamp: 1; -webkit-line-clamp: 1; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+                                            <?= htmlspecialchars($sim['items_summary']) ?>
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <div style="display: flex; gap: 0.75rem;">
                                 <button class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.8rem; display: flex; align-items: center; gap: 0.4rem;" onclick="editSimulation(<?= $sim['id'] ?>)">
@@ -395,7 +413,7 @@ $global_costs = $stmtCosts->fetchAll(PDO::FETCH_ASSOC);
                     <div class="item-card" id="item-${item.id}">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem; align-items: flex-start;">
                             <div>
-                                <div style="font-weight: 800; font-size: 1.25rem;">${item.name}</div>
+                                <div style="font-weight: 700; font-size: 1.25rem;"><strong>${item.name}</strong></div>
                                 <div style="color: var(--text-dim); font-size: 0.9rem;">SKU: ${item.sku}</div>
                             </div>
                             <div style="text-align: right;">
@@ -459,6 +477,8 @@ $global_costs = $stmtCosts->fetchAll(PDO::FETCH_ASSOC);
                 supplier_name,
                 items: items.map(i => ({
                     product_id: i.product_id,
+                    item_name: i.name,
+                    item_code: i.sku,
                     base_cost: i.base_cost,
                     taxes_and_costs: i.taxes_and_costs,
                     real_cost: calculateRealCost(i)

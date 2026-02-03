@@ -250,7 +250,7 @@ $products = $stmt->fetchAll();
                         $margin = $p['current_price'] > 0 ? (($p['current_price'] - $cp) / $p['current_price']) * 100 : 0;
                     ?>
                     <tr>
-                        <td style="font-family: monospace; font-weight: 700; color: var(--primary);"><?= $p['sku'] ?></td>
+                        <td><strong><?= $p['sku'] ?></strong></td>
                         <td><?= $p['name'] ?></td>
                         <td>R$ <?= number_format($cp, 2, ',', '.') ?></td>
                         <td><strong>R$ <?= number_format($p['current_price'], 2, ',', '.') ?></strong></td>

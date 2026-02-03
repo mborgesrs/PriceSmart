@@ -42,9 +42,6 @@ $company = $stmtComp->fetch();
         .btn-new { background: var(--primary); color: white; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: all 0.2s; border: none; }
         .btn-new:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); }
 
-        .app-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
-        .app-table th { text-align: left; padding: 0.6rem 1rem; color: var(--text-dim); font-weight: 600; border-bottom: 2px solid var(--border); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .app-table td { padding: 0.4rem 1rem; border-bottom: 1px solid #f1f5f9; color: var(--text-main); font-size: 0.9rem; }
     </style>
 </head>
 <body>

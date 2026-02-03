@@ -19,6 +19,8 @@ try {
         id INT AUTO_INCREMENT PRIMARY KEY,
         simulation_id INT NOT NULL,
         product_id INT NOT NULL,
+        item_name VARCHAR(255),
+        item_code VARCHAR(50),
         base_cost DECIMAL(10,2) NOT NULL,
         taxes_and_costs JSON, -- Stores array of {name, value, is_percentage}
         real_cost DECIMAL(10,2) NOT NULL,

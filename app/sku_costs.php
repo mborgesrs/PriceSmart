@@ -43,9 +43,6 @@ $base_tax = $company['base_tax_rate'] ?? 0;
         .sku-card { background: white; border-radius: 16px; border: 1px solid var(--border); padding: 1.5rem; transition: all 0.2s; }
         .sku-card:hover { border-color: var(--primary); box-shadow: var(--card-shadow); }
         
-        .app-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-        .app-table th { text-align: left; padding: 0.6rem 1rem; color: var(--text-dim); font-weight: 600; border-bottom: 2px solid var(--border); }
-        .app-table td { padding: 0.4rem 1rem; border-bottom: 1px solid #f1f5f9; color: var(--text-main); }
         
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal.active { display: flex; }
@@ -174,7 +171,7 @@ $base_tax = $company['base_tax_rate'] ?? 0;
                     ?>
                     <tr>
                         <td>
-                            <div style="font-weight: 700; color: var(--text-main);"><?= $s['sku'] ?></div>
+                            <div style="font-weight: 700; color: var(--text-main);"><strong><?= $s['sku'] ?></strong></div>
                             <div style="font-size: 0.75rem; color: var(--text-dim);"><?= $s['name'] ?></div>
                         </td>
                         <td>R$ <?= number_format($base_cost, 2, ',', '.') ?></td>

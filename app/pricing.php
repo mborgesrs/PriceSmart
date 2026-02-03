@@ -150,8 +150,8 @@ $suggestions = $stmt->fetchAll();
                     <?php foreach ($suggestions as $s): ?>
                     <tr>
                         <td>
-                            <div style="font-weight: 600; color: var(--text-main);"><?= $s['product_name'] ?></div>
-                            <div style="font-size: 0.75rem; color: var(--text-dim);">SKU: <?= $s['sku'] ?></div>
+                            <div style="font-weight: 700; color: var(--text-main);"><strong><?= $s['product_name'] ?></strong></div>
+                            <div style="font-size: 0.75rem; color: var(--text-dim);">SKU: <strong><?= $s['sku'] ?></strong></div>
                         </td>
                         <td>R$ <?= number_format($s['current_price'], 2, ',', '.') ?></td>
                         <td><span class="suggestion-chip">R$ <?= number_format($s['suggested_price'], 2, ',', '.') ?></span></td>

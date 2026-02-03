@@ -290,14 +290,17 @@ header.app-header {
     padding: 0.6rem 1rem;
     color: var(--text-dim);
     font-weight: 600;
-    font-size: 0.85rem;
-    border-bottom: 2px solid var(--bg-app);
+    font-size: 0.8rem;
+    border-bottom: 2px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .app-table td {
-    padding: 0.6rem 1rem;
-    border-bottom: 1px solid var(--bg-app);
+    padding: 0.4rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
     color: var(--text-main);
+    font-size: 0.9rem;
 }
 
 /* Buttons */
@@ -577,4 +580,5 @@ header.app-header {
     opacity: 1;
     visibility: visible;
 }
+
 @import 'app_mobile.css';

@@ -347,11 +347,13 @@ switch ($action) {
                 $simulation_id = $pdo->lastInsertId();
             }
 
-            $stmtItem = $pdo->prepare("INSERT INTO purchase_simulation_items (simulation_id, product_id, base_cost, taxes_and_costs, real_cost) VALUES (?, ?, ?, ?, ?)");
+            $stmtItem = $pdo->prepare("INSERT INTO purchase_simulation_items (simulation_id, product_id, item_name, item_code, base_cost, taxes_and_costs, real_cost) VALUES (?, ?, ?, ?, ?, ?, ?)");
             foreach ($items as $item) {
                 $stmtItem->execute([
                     $simulation_id,
                     $item['product_id'],
+                    $item['item_name'] ?? $item['name'] ?? '',
+                    $item['item_code'] ?? $item['sku'] ?? '',
                     $item['base_cost'],
                     json_encode($item['taxes_and_costs']),
                     $item['real_cost']
@@ -375,13 +377,15 @@ switch ($action) {
 
             if (!$simulation) throw new Exception("Simulação não encontrada.");
 
-            $stmtItems = $pdo->prepare("SELECT si.*, p.name, p.sku FROM purchase_simulation_items si JOIN products p ON si.product_id = p.id WHERE si.simulation_id = ?");
+            $stmtItems = $pdo->prepare("SELECT si.*, p.name as prod_name, p.sku as prod_sku FROM purchase_simulation_items si LEFT JOIN products p ON si.product_id = p.id WHERE si.simulation_id = ?");
             $stmtItems->execute([$id]);
             $items = $stmtItems->fetchAll(PDO::FETCH_ASSOC);
 
-            // Decode JSON for frontend
+            // Decode JSON and ensure name/sku are present from historical data if product was deleted/changed
             foreach ($items as &$item) {
                 $item['taxes_and_costs'] = json_decode($item['taxes_and_costs'], true);
+                $item['name'] = $item['item_name'] ?: $item['prod_name'] ?: 'Produto não encontrado';
+                $item['sku'] = $item['item_code'] ?: $item['prod_sku'] ?: 'N/A';
             }
 
             $response = ['success' => true, 'simulation' => $simulation, 'items' => $items];
